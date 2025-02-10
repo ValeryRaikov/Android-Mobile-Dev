@@ -35,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        final TextView userName = (TextView) findViewById(R.id.userNameBOX);
-        final TextView password = (TextView) findViewById(R.id.PasswordBOX);
-        final Button login = (Button) findViewById(R.id.LoginBtn);
+        final TextView userName = findViewById(R.id.userNameBOX);
+        final TextView password = findViewById(R.id.PasswordBOX);
+        final Button login = findViewById(R.id.LoginBtn);
 
-        ImageView img = (ImageView) findViewById(R.id.imageView);
+        ImageView img = findViewById(R.id.imageView);
         img.setImageResource(R.mipmap.ic_launcher);
 
         alertDialogBuilder = new AlertDialog.Builder(this);
@@ -50,38 +50,37 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 List<User> users = db.getAllUsers();
-                boolean log = true;
+                boolean log = false; // Assume failure by default
 
-                for(User u : users) {
+                for (User u : users) {
                     if (userName.getText().toString().equals(u.getUserName()) &&
-                        password.getText().toString().equals(u.getPassword())) {
-                        log = false;
-                        open("Login Successful!", log);
-                        alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
+                            password.getText().toString().equals(u.getPassword())) {
+                        log = true; // Login successful
                         break;
                     }
+                }
 
-                    if (log) {
-                        open("Unsuccessful!", log);
-                        alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
-                    }
+                if (log) {
+                    open("Login Successful!", true);
+                } else {
+                    open("Unsuccessful!", false);
                 }
             }
         });
     }
 
-    public void open(String ss, final boolean log) {
-        alertDialogBuilder.setMessage(ss);
-
+    public void open(String message, final boolean success) {
+        alertDialogBuilder.setMessage(message);
         alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                // TODO Create New Activity -> Work Activity
-                if (log == false)
+                if (success) {
                     startActivity(new Intent(MainActivity.this, WorkActivity.class));
+                }
             }
         });
+
+        alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }
