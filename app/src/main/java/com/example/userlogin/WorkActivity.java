@@ -39,7 +39,6 @@ public class WorkActivity extends AppCompatActivity {
         addUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { startActivity(
-                // TODO Create Activity -> AddUserActivity
                 new Intent(WorkActivity.this, AddUserActivity.class));
             }
         });
